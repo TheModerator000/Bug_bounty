@@ -1,8 +1,9 @@
 #!/bin/bash
 
 ###Before running this make sure that you have the scan.lib library installed and jq downloaded. This file will not work without those depndencies.###
+###Also, make sure that you create a Tools folder in your Documents folder before cloning. Or you can change the source of the scan.lib file to fit your scan.lib location###
 
-source ~/Documents/Tools/./scan.lib
+source ~/Documents/Tools/Bug_bounty./scan.lib
 
 while getopts "m:i" OPTION;do
   case $OPTION in
