@@ -1,13 +1,16 @@
 #!/bin/bash
-source ./scan.lib
 
-while getopts "m:i" OPTION; do
+###Before running this make sure that you have the scan.lib library installed and jq downloaded. This file will not work without those depndencies.###
+
+source ~/Documents/Tools/./scan.lib
+
+while getopts "m:i" OPTION;do
   case $OPTION in
     m)
       MODE=$OPTARG
       ;;
     i)
-      INTERACTIVE=ture
+      INTERACTIVE=true
       ;;
   esac
 done
@@ -39,31 +42,31 @@ report_domain(){
   DIRECTORY=${DOMAIN}_recon
   echo "Generating recon report for $DOMAIN..."
  TODAY=$(date)
- if[ -f $DIRECTORY/nmap]; then
+ if [ -f $DIRECTORY/nmap ];then
   echo "***This scan was create on $TODAY***" > $DIRECTORY/report
     grep -E "^\s*\S+\s+\S+\s+\S+\s*$" $DIRECTORY/nmap >> $DIRECTORY/report
  fi
- if [ -f $DIRECTORY/dirsearch]; then
+ if [ -f $DIRECTORY/dirsearch ];then
   echo "***Results for Dirsearch:" >> $DIRECTORY/report
   cat $DIRECTORY/dirsearch >> $DIRECTORY/report
  fi
- if [-f $DIRECTORY/crt]; then
+ if [ -f $DIRECTORY/crt ];then
   echo "Results for crt.sh:" >> $DIRECTORY/report
   jq -r ".[] | .name_value" $DIRECTORY/crt >> $DIRECTORY/report
  fi
 }
-if [ $INTERACTIVE ]; then
+if [ $INTERACTIVE ];then
   INPUT="BLANK"
-  while [$INPUT != "quit" ]; do
+  while [$INPUT != "quit" ];do
     echo "***Please enter domain!***"
     read INPUT
-    if [ $INPUT != "quit" ]; then
+    if [ $INPUT != "quit" ];then
       scan_domain $INPUT
       report_domain $INPUT
     fi
   done
 else
-  for i in "${@:$OPTIND:$#}"; do
+  for i in "${@:$OPTIND:$#}";do
     scan_domain $i
     report_domain $i
     
